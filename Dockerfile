@@ -1,4 +1,4 @@
-FROM rust:1.82-slim
+FROM rust:1.87-slim
 
 RUN apt update && apt install -y \
     git \
@@ -11,10 +11,12 @@ RUN apt update && apt install -y \
 RUN git clone https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs.git
 WORKDIR /gst-plugins-rs
 
+RUN git checkout 0.14.1
+
 RUN cargo install cargo-c
-RUN cargo cbuild -p gst-plugin-webrtc
+RUN cargo cbuild -p gst-plugin-webrtc --features livekit
 RUN cargo cinstall -p gst-plugin-webrtc
 
-WORKDIR /usr/local/lib64/gstreamer-1.0
+WORKDIR /usr/local/lib/gstreamer-1.0
 
 ENTRYPOINT [ "/bin/sh" ]
