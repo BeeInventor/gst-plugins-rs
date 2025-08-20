@@ -1,5 +1,6 @@
 FROM rust:1.87-slim
 
+# https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/tree/main/net/webrtc?ref_type=heads
 RUN apt update && apt install -y \
     git \
     pkg-config \
@@ -15,7 +16,7 @@ RUN git checkout 0.14.1
 
 RUN cargo install cargo-c
 RUN cargo cbuild -p gst-plugin-webrtc --features livekit
-RUN cargo cinstall -p gst-plugin-webrtc
+RUN cargo cinstall -p gst-plugin-webrtc --features livekit
 
 WORKDIR /usr/local/lib/gstreamer-1.0
 
