@@ -3,7 +3,7 @@
 set -e
 
 echo "Building Docker image..."
-docker build -t gst-plugins-rs-build .
+docker build --platform=linux/amd64 -t gst-plugins-rs-build .
 
 echo "Creating temporary container..."
 ID=$(docker create gst-plugins-rs-build)
@@ -15,9 +15,5 @@ echo "Copying plugin artifacts..."
 mkdir -p ./output
 
 # The webrtc plugin library
-docker cp "$ID:/usr/local/lib/gstreamer-1.0/libgstrswebrtc.so" ./output/
-
-# The livekit plugin library (contains livekitwebrtcsrc element)
-# docker cp "$ID:/usr/local/lib/gstreamer-1.0/libgstlivekit.so" ./output/
-
-echo "Plugins successfully exported to ./output directory."
+docker cp "$ID:/gst-plugins-rs/build.log" ./output/
+docker cp "$ID:/usr/lib/x86_64-linux-gnu/gstreamer-1.0/libgstrswebrtc.so" ./output/
